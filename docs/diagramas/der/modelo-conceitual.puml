@@ -1,25 +1,69 @@
-@startuml
-' ============================================================
-' Diagrama Entidade-Relacionamento (DER)
-' ============================================================
+@startuml Restaurante
+hide circle
+skinparam linetype ortho
+entity Cliente {
+    * codigo : int <<PK>>
+    --
+    nome : varchar
+    cidade : varchar
+    celular : varchar
+    email : varchar
+}
 
-' --- Exemplo ---
-' entity "alunos" as alunos {
-'   + id: INT [PK]
-'   --
-'   nome: VARCHAR(100)
-'   email: VARCHAR(100) [UNIQUE]
-'   created_at: TIMESTAMP
-' }
-'
-' entity "matriculas" as matriculas {
-'   + id: INT [PK]
-'   --
-'   aluno_id: INT [FK -> alunos.id]
-'   curso_id: INT [FK -> cursos.id]
-'   data_matricula: DATE
-' }
-'
-' alunos ||--o{ matriculas
+entity Garcom {
+    * codigo : int <<PK>>
+    --
+    nome : varchar
+    telefone : varchar
+    cpf : varchar
+    salario : decimal
+    turno : varchar
+}
 
+entity Mesa {
+    * codigo : int <<PK>>
+    --
+    quantidade_lugares : int
+    setor : varchar
+    situacao : varchar
+}
+
+entity Prato {
+    * codigo : int <<PK>>
+    --
+    nome : varchar
+    descricao : varchar
+    tipo : varchar
+    preco : decimal
+}
+
+entity Pedido {
+    * codigo : int <<PK>>
+    --
+    data : date
+    status : varchar
+
+    cliente_id : int <<FK>>
+    mesa_id : int <<FK>>
+    garcom_id : int <<FK>>
+}
+
+entity ItemPedido {
+    * pedido_id : int <<FK>>
+    * prato_id : int <<FK>>
+    --
+    quantidade : int
+    preco_unitario : decimal
+    subtotal : decimal
+}
+
+Cliente "1" ||--o{ "0..*" Pedido : realiza >
+
+Garcom "1" ||--o{ "0..*" Pedido : atende >
+
+Mesa "1" ||--o{ "0..*" Pedido : pertence <
+
+Pedido "1" ||--|{ "1..*" ItemPedido : referencia <
+
+Prato "1" ||--o{ "0..*" ItemPedido : compõe <
 @enduml
