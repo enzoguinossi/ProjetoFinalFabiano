@@ -1,28 +1,106 @@
-@startuml
-' ============================================================
-' Diagrama de Classes UML
-' ============================================================
+@startuml Restaurante
 
-' --- Exemplo ---
-' class Aluno {
-'   - int id
-'   - String nome
-'   - String email
-'   - LocalDateTime createdAt
-'   --
-'   + Aluno(String nome, String email)
-'   + getNome(): String
-'   + setNome(String nome): void
-' }
-'
-' class Matricula {
-'   - int id
-'   - LocalDate dataMatricula
-'   --
-'   + Matricula(Aluno aluno, Curso curso)
-' }
-'
-' Aluno "1" -- "*" Matricula : possui
-' Curso "1" -- "*" Matricula : possui
+'===============================================================
+'                          ENUMERADORES
+'===============================================================
+enum StatusPedido {
+    PENDENTE
+    ATENDIDO
+    CANCELADO
+}
+
+enum StatusMesa {
+    LIVRE
+    OCUPADA
+}
+
+enum TurnosTrabalho {
+    MANHÃ
+    TARDE
+    NOITE
+}
+
+enum TiposPrato {
+    ENTRADA
+    PRATOPRINCIPAL
+    BEBIDA
+    SOBREMESA
+}
+
+'===============================================================
+'                          CLASSES
+'===============================================================
+
+class Cliente {
+    - codigo: int
+    --
+    - nome: String
+    - cidade: String
+    - celular: String
+    - email: String
+}
+
+class Mesa {
+    - codigo: int
+    - quantidadeLugares: int
+    - setor: String
+    - status: StatusMesa
+}
+
+class Garcom {
+    - codigo: int
+    - nome: String
+    - telefone: String
+    - cpf: String
+    - salario: double
+    - turno: TurnosTrabalho
+}
+
+class Pedido {
+    - codigo: int
+    - data: Date
+    - status: StatusPedido
+    + calcularTotal() : double
+}
+
+class ItemPedido {
+    - quantidade: int
+    - precoUnitario: double
+    - subtotal: double
+}
+
+class Prato {
+    - codigo: int
+    - nome: String
+    - descricao: String
+    - tipo: TiposPrato
+    - preco: double
+}
+
+'===============================================================
+'                          ASSOCIAÇÕES
+'===============================================================
+
+Cliente "1" -- "0..*" Pedido : realiza >
+
+Garcom "1" -- "0..*" Pedido : atende >
+Mesa "1" -- "0..*" Pedido : pertence <
+
+Pedido "1" *-- "1..*" ItemPedido
+
+ItemPedido "*"-- "1" Prato: referencia >
+
+'===============================================================
+'                           ANOTAÇÕES
+'===============================================================
+
+note right of Garcom
+CPF deve ser válido
+end note
+
+note right of ItemPedido
+Necessário para manter o preço do prato no momento da compra
+e lidar com mais de um prato do mesmo tipo por pedido
+end note
 
 @enduml
