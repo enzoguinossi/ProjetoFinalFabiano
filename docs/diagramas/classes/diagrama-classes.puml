@@ -1,0 +1,28 @@
+@startuml
+' ============================================================
+' Diagrama de Classes UML
+' ============================================================
+
+' --- Exemplo ---
+' class Aluno {
+'   - int id
+'   - String nome
+'   - String email
+'   - LocalDateTime createdAt
+'   --
+'   + Aluno(String nome, String email)
+'   + getNome(): String
+'   + setNome(String nome): void
+' }
+'
+' class Matricula {
+'   - int id
+'   - LocalDate dataMatricula
+'   --
+'   + Matricula(Aluno aluno, Curso curso)
+' }
+'
+' Aluno "1" -- "*" Matricula : possui
+' Curso "1" -- "*" Matricula : possui
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml Restaurante
+skinparam linetype ortho
+
+enum StatusPedido {
+    PENDENTE
+    ATENDIDO
+    CANCELADO
+}
+enum StatusMesa {
+    LIVRE
+    OCUPADA
+}
+enum TurnosTrabalho {
+    MANHÃ
+    TARDE
+    NOITE
+}
+enum TiposPrato {
+    ENTRADA
+    PRATOPRINCIPAL
+    BEBIDA
+    SOBREMESA
+}
+class Cliente {
+    - codigo: int
+    - nome: String
+    - cidade: String
+    - celular: String
+    - email: String
+}
+class Mesa {
+    - codigo: int
+    - quantidadeLugares: int
+    - setor: String
+    - status: StatusMesa
+}
+class Garçom {
+    - codigo: int
+    - nome: String
+    - telefone: String
+    - cpf: String
+    - salario: double
+    - turno: TurnosTrabalho
+}
+class Pedido {
+    - codigo: int
+    - data: Date
+    - pratos: Prato[]
+    - status: StatusPedido
+    - preco: double
+}
+class Prato {
+    - codigo: int
+    - nome: String
+    - descricao: String
+    - tipo: TiposPrato
+}
+@enduml

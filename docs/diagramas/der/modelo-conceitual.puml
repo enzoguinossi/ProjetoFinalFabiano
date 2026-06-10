@@ -1,0 +1,25 @@
+@startuml
+' ============================================================
+' Diagrama Entidade-Relacionamento (DER)
+' ============================================================
+
+' --- Exemplo ---
+' entity "alunos" as alunos {
+'   + id: INT [PK]
+'   --
+'   nome: VARCHAR(100)
+'   email: VARCHAR(100) [UNIQUE]
+'   created_at: TIMESTAMP
+' }
+'
+' entity "matriculas" as matriculas {
+'   + id: INT [PK]
+'   --
+'   aluno_id: INT [FK -> alunos.id]
+'   curso_id: INT [FK -> cursos.id]
+'   data_matricula: DATE
+' }
+'
+' alunos ||--o{ matriculas
+
+@enduml
