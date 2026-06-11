@@ -6,6 +6,15 @@ public class ItemPedido {
     private double subtotal;
     private Prato prato;
 
+    public ItemPedido() {}
+
+    public ItemPedido(int quantidade, Prato prato) {
+        this.quantidade = quantidade;
+        this.prato = prato;
+        this.precoUnitario = prato.getPreco();
+        this.subtotal = quantidade * precoUnitario;
+    }
+
     private void recalcularSubtotal() {
         this.subtotal = this.quantidade * this.precoUnitario;
     }
@@ -26,4 +35,14 @@ public class ItemPedido {
 
     public Prato getPrato() { return prato; }
     public void setPrato(Prato prato) { this.prato = prato; }
+
+    @Override
+    public String toString() {
+        return "ItemPedido{" +
+                "prato=" + (prato != null ? prato.getNome() : null) +
+                ", quantidade=" + quantidade +
+                ", precoUnitario=" + precoUnitario +
+                ", subtotal=" + subtotal +
+                '}';
+    }
 }

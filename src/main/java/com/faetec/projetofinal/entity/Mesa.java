@@ -6,6 +6,15 @@ public class Mesa {
     private String setor;
     private StatusMesa status;
 
+    public Mesa() {}
+
+    public Mesa(int codigo, int quantidadeLugares, String setor, StatusMesa status) {
+        this.codigo = codigo;
+        this.quantidadeLugares = quantidadeLugares;
+        this.setor = setor;
+        this.status = status;
+    }
+
     public int getCodigo() { return codigo; }
     public void setCodigo(int codigo) { this.codigo = codigo; }
 
@@ -17,4 +26,14 @@ public class Mesa {
 
     public StatusMesa getStatus() { return status; }
     public void setStatus(StatusMesa status) { this.status = status; }
+
+    @Override
+    public String toString() {
+        return "Mesa{" +
+                "codigo=" + codigo +
+                ", quantidadeLugares=" + quantidadeLugares +
+                ", setor='" + setor + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

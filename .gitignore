@@ -37,6 +37,10 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 release.properties
 
+### Config ###
+config.properties
+!config.example.properties
+
 ### Java ###
 *.class
 *.jar

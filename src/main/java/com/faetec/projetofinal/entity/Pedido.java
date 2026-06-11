@@ -12,6 +12,17 @@ public class Pedido {
     private Mesa mesa;
     private List<ItemPedido> itens;
 
+    public Pedido() {}
+
+    public Pedido(int codigo, LocalDate data, StatusPedido status, Cliente cliente, Garcom garcom, Mesa mesa) {
+        this.codigo = codigo;
+        this.data = data;
+        this.status = status;
+        this.cliente = cliente;
+        this.garcom = garcom;
+        this.mesa = mesa;
+    }
+
     public double calcularTotal() {
         return itens == null ? 0.0 : itens.stream()
                 .mapToDouble(ItemPedido::getSubtotal)
@@ -38,4 +49,19 @@ public class Pedido {
 
     public List<ItemPedido> getItens() { return itens; }
     public void setItens(List<ItemPedido> itens) { this.itens = itens; }
+    public void addItem(ItemPedido item) { this.itens.add(item); }
+
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "codigo=" + codigo +
+                ", data=" + data +
+                ", status=" + status +
+                ", cliente=" + (cliente != null ? cliente.getNome() : null) +
+                ", garcom=" + (garcom != null ? garcom.getNome() : null) +
+                ", mesa=" + (mesa != null ? mesa.getCodigo() : null) +
+                ", itens=" + (itens != null ? itens.size() : 0) +
+                ", total=" + calcularTotal() +
+                '}';
+    }
 }

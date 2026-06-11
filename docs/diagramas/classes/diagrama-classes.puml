@@ -1,202 +1,416 @@
 @startuml Restaurante
+skinparam linetype ortho
+skinparam packageStyle rect
+
+top to bottom direction
+skinparam ranksep 120
 
 '===============================================================
 '                          ENUMERADORES
 '===============================================================
-enum StatusPedido {
-    PENDENTE
-    ATENDIDO
-    CANCELADO
-}
+frame "Enumeradores" as fenum {
+    enum StatusPedido {
+        PENDENTE
+        ATENDIDO
+        CANCELADO
+    }
 
-enum StatusMesa {
-    LIVRE
-    OCUPADA
-}
+    enum StatusMesa {
+        LIVRE
+        OCUPADA
+    }
 
-enum TurnosTrabalho {
-    MANHÃ
-    TARDE
-    NOITE
-}
+    enum TurnosTrabalho {
+        MANHÃ
+        TARDE
+        NOITE
+    }
 
-enum TiposPrato {
-    ENTRADA
-    PRATOPRINCIPAL
-    BEBIDA
-    SOBREMESA
-}
-
-'===============================================================
-'                          CLASSES INTERFACE
-'===============================================================
-
-
-class FormularioBase {
-    - pnlConteudo: JPanel
-    - pnlBotoes: JPanel
-    - btnSalvar: JButton
-    - btnAlterar: JButton
-    - btnExcluir: JButton
-    - btnListar: JButton
-    - btnFechar: JButton
-}
-
-' TODO: ADICIONAR LISTA/TABELA
-class FormularioCadastroCliente extends FormularioBase {
-    - lblCodigo: JLabel
-    - txtCodigo: JTextField
-    - lblNome: JLabel
-    - txtNome: JTextField
-    - lblCidade: JLabel
-    - txtCidade: JTextField
-    - lblCelular: JLabel
-    - txtCelular: JTextField
-    - lblEmail: JLabel
-    - txtEmail: JTextField
-}
-
-' TODO: ADICIONAR LISTA/TABELA
-class FormularioCadastroGarcom extends FormularioBase {
-    - lblCodigo: JLabel
-    - txtCodigo: JTextField
-    - lblNome: JLabel
-    - txtNome:   JTextField
-    - lblTelefone: JLabel
-    - txtTelefone: JTextField
-    - lblCPF: JLabel
-    - txtCPF: JTextField
-    - lblSalario: JLabel
-    - txtSalario: JTextField
-    - lblTurno: JLabel
-    - cmbTurno: JComboBox
-}
-
-' TODO: ADICIONAR LISTA/TABELA
-class FormularioCadastroMesa extends FormularioBase {
-    - lblCodigo: JLabel
-    - txtCodigo: JTextField
-    - lblQuantidadeLugares: JLabel
-    - txtQuantidadeLugares: JTextField
-    - lblSituacao: JLabel
-    - cmbSituacao: JComboBox
-    - lblSetor: JLabel
-    - txtSetor: JTextField
-}
-
-' TODO: ADICIONAR LISTA/TABELA
-class FormularioCadastroPrato extends FormularioBase {
-    - lblCodigo: JLabel
-    - txtCodigo: JTextField
-    - lblNome: JLabel
-    - txtNome: JTextField
-    - lblDescricao: JLabel
-    - txtDescricao: JTextField
-    - lblTipo: JLabel
-    - cmbTipo: JComboBox
-    - lblPreco: JLabel
-    - txtPreco: JTextField
-}
-
-' TODO: ADICIONAR LISTA/TABELA
-class FormularioCadastroPedido extends FormularioBase {
-    - lblCodigo: JLabel
-    - txtCodigo: JTextField
-    - lblData: JLabel
-    - txtData: JTextField
-    - lblStatus: JLabel
-    - cmbStatus: JComboBox
-    - lblGarcom: JLabel
-    - cmbGarcom: JComboBox
-    - lblMesa: JLabel
-    - cmbMesa: JComboBox
-    - lblCliente: JLabel
-    - cmbCliente: JComboBox
-    - lblTotalPagar: JLabel
-    - txtTotalPagar: JTextField
-}
-class FormularioPrincipal {
-}
-'===============================================================
-'                          CLASSES ENTIDADES
-'===============================================================
-
-class Cliente {
-    - codigo: int
-    --
-    - nome: String
-    - cidade: String
-    - celular: String
-    - email: String
-}
-
-class Mesa {
-    - codigo: int
-    - quantidadeLugares: int
-    - setor: String
-    - status: StatusMesa
-}
-
-class Garcom {
-    - codigo: int
-    - nome: String
-    - telefone: String
-    - cpf: String
-    - salario: double
-    - turno: TurnosTrabalho
-}
-
-class Pedido {
-    - codigo: int
-    - data: Date
-    - status: StatusPedido
-    + calcularTotal() : double
-}
-
-class ItemPedido {
-    - quantidade: int
-    - precoUnitario: double
-    - subtotal: double
-}
-
-class Prato {
-    - codigo: int
-    - nome: String
-    - descricao: String
-    - tipo: TiposPrato
-    - preco: double
+    enum TiposPrato {
+        ENTRADA
+        PRATOPRINCIPAL
+        BEBIDA
+        SOBREMESA
+    }
 }
 
 '===============================================================
-'                          ASSOCIAÇÕES
+'                  CAMADA DE APRESENTAÇÃO (BOUNDARY)
+'===============================================================
+frame "Apresentação" as fap <<Frame>> {
+    interface FormularioBase {
+        + {abstract} actionSalvar()
+        + {abstract} actionAlterar()
+        + {abstract} actionExcluir()
+        + {abstract} actionListar()
+        + {abstract} limparCampos()
+        + {abstract} validarCampos() : boolean
+    }
+
+    class FramePrincipal {
+        - pnlConteudo: JPanel
+        - menuBar: JMenuBar
+        ..
+        + adicionarFormulario(chave: String, painel: JPanel)
+        + exibirFormulario(chave: String)
+    }
+
+    class ClienteForm implements FormularioBase {
+        - controller: ClienteController
+        --
+        - lblCodigo: JLabel
+        - txtCodigo: JTextField
+        - lblNome: JLabel
+        - txtNome: JTextField
+        - lblCidade: JLabel
+        - txtCidade: JTextField
+        - lblCelular: JLabel
+        - txtCelular: JTextField
+        - lblEmail: JLabel
+        - txtEmail: JTextField
+    }
+
+    class GarcomForm implements FormularioBase {
+        - controller: GarcomController
+        --
+        - lblCodigo: JLabel
+        - txtCodigo: JTextField
+        - lblNome: JLabel
+        - txtNome:   JTextField
+        - lblTelefone: JLabel
+        - txtTelefone: JTextField
+        - lblCPF: JLabel
+        - txtCPF: JTextField
+        - lblSalario: JLabel
+        - txtSalario: JTextField
+        - lblTurno: JLabel
+        - cmbTurno: JComboBox
+    }
+
+    class MesaForm implements FormularioBase {
+        - controller: MesaController
+        --
+        - lblCodigo: JLabel
+        - txtCodigo: JTextField
+        - lblQuantidadeLugares: JLabel
+        - txtQuantidadeLugares: JTextField
+        - lblSituacao: JLabel
+        - cmbSituacao: JComboBox
+        - lblSetor: JLabel
+        - txtSetor: JTextField
+    }
+
+    class PratoForm implements FormularioBase {
+        - controller: PratoController
+        --
+        - lblCodigo: JLabel
+        - txtCodigo: JTextField
+        - lblNome: JLabel
+        - txtNome: JTextField
+        - lblDescricao: JLabel
+        - txtDescricao: JTextField
+        - lblTipo: JLabel
+        - cmbTipo: JComboBox
+        - lblPreco: JLabel
+        - txtPreco: JTextField
+    }
+
+    class PedidoForm {
+        - controller: PedidoController
+        --
+        - lblCodigo: JLabel
+        - txtCodigo: JTextField
+        - lblData: JLabel
+        - txtData: JTextField
+        - lblStatus: JLabel
+        - cmbStatus: JComboBox
+        - lblGarcom: JLabel
+        - cmbGarcom: JComboBox
+        - lblMesa: JLabel
+        - cmbMesa: JComboBox
+        - lblCliente: JLabel
+        - cmbCliente: JComboBox
+        - lblTotalPagar: JLabel
+        - txtTotalPagar: JTextField
+        ..
+        + novoPedido()
+        + adicionarItem()
+        + removerItem()
+        + encerrarPedido()
+        + fechar()
+    }
+}
+
+'===============================================================
+'                  CAMADA DE CONTROLE (CONTROL)
+'===============================================================
+frame "Controle" as fco <<Rectangle>> {
+
+    class ClienteController {
+        + salvar(cliente: Cliente) : boolean
+        + alterar(cliente: Cliente) : boolean
+        + excluir(codigo: int) : boolean
+        + listar() : List<Cliente>
+        + buscarPorCodigo(codigo: int) : Cliente
+    }
+
+    class GarcomController {
+        + salvar(garcom: Garcom) : boolean
+        + alterar(garcom: Garcom) : boolean
+        + excluir(codigo: int) : boolean
+        + listar() : List<Garcom>
+    }
+
+    class MesaController {
+        + salvar(mesa: Mesa) : boolean
+        + alterar(mesa: Mesa) : boolean
+        + excluir(codigo: int) : boolean
+        + listar() : List<Mesa>
+    }
+
+    class PratoController {
+        + salvar(prato: Prato) : boolean
+        + alterar(prato: Prato) : boolean
+        + excluir(codigo: int) : boolean
+        + listar() : List<Prato>
+    }
+
+    class PedidoController {
+        + novoPedido(pedido: Pedido) : boolean
+        + adicionarItem(pedido: Pedido, item: ItemPedido) : boolean
+        + removerItem(item: ItemPedido) : boolean
+        + encerrarPedido(pedido: Pedido) : boolean
+        + listar() : List<Pedido>
+    }
+
+    class ControladoraInterface {
+        + main(args: String[])
+        ..
+        - configurarMenu(menuBar: JMenuBar)
+        - inicializarFormularios(frame: FramePrincipal)
+    }
+}
+
+'===============================================================
+'                  CAMADA DE DADOS (DATA ACCESS)
+'===============================================================
+frame "Dados" as fda <<Database>> {
+
+    class SQLController {
+        + {static} getInstance() : SQLController
+        + getConnection() : Connection
+        + executeUpdate(sql: String, params: Object[]) : int
+        + executeQuery(sql: String, params: Object[]) : List<Map<String, Object>>
+        + close()
+    }
+}
+
+'===============================================================
+'                  ENTIDADES (MODEL)
+'===============================================================
+frame "Entidades" as fen <<Folder>> {
+
+    class Cliente {
+        - codigo: int
+        --
+        - nome: String
+        - cidade: String
+        - celular: String
+        - email: String
+        ..
+        + getCodigo() : int
+        + setCodigo(codigo: int)
+        + getNome() : String
+        + setNome(nome: String)
+        + getCidade() : String
+        + setCidade(cidade: String)
+        + getCelular() : String
+        + setCelular(celular: String)
+        + getEmail() : String
+        + setEmail(email: String)
+    }
+
+    class Mesa {
+        - codigo: int
+        --
+        - quantidadeLugares: int
+        - setor: String
+        - status: StatusMesa
+        ..
+        + getCodigo() : int
+        + setCodigo(codigo: int)
+        + getQuantidadeLugares() : int
+        + setQuantidadeLugares(quantidadeLugares: int)
+        + getSetor() : String
+        + setSetor(setor: String)
+        + getStatus() : StatusMesa
+        + setStatus(status: StatusMesa)
+    }
+
+    class Garcom {
+        - codigo: int
+        --
+        - nome: String
+        - telefone: String
+        - cpf: String
+        - salario: double
+        - turno: TurnosTrabalho
+        ..
+        + getCodigo() : int
+        + setCodigo(codigo: int)
+        + getNome() : String
+        + setNome(nome: String)
+        + getTelefone() : String
+        + setTelefone(telefone: String)
+        + getCpf() : String
+        + setCpf(cpf: String)
+        + getSalario() : double
+        + setSalario(salario: double)
+        + getTurno() : TurnosTrabalho
+        + setTurno(turno: TurnosTrabalho)
+    }
+
+    class Pedido {
+        - codigo: int
+        --
+        - data: LocalDate
+        - status: StatusPedido
+        - cliente: Cliente
+        - garcom: Garcom
+        - mesa: Mesa
+        - itens: List<ItemPedido>
+        ..
+        + getCodigo() : int
+        + setCodigo(codigo: int)
+        + getData() : LocalDate
+        + setData(data: LocalDate)
+        + getStatus() : StatusPedido
+        + setStatus(status: StatusPedido)
+        + getCliente() : Cliente
+        + setCliente(cliente: Cliente)
+        + getGarcom() : Garcom
+        + setGarcom(garcom: Garcom)
+        + getMesa() : Mesa
+        + setMesa(mesa: Mesa)
+        + getItens() : List<ItemPedido>
+        + setItens(itens: List<ItemPedido>)
+        + calcularTotal() : double
+    }
+
+    class ItemPedido {
+        - quantidade: int
+        - precoUnitario: double
+        - subtotal: double
+        - prato: Prato
+        ..
+        + getQuantidade() : int
+        + setQuantidade(quantidade: int)
+        + getPrecoUnitario() : double
+        + setPrecoUnitario(precoUnitario: double)
+        + getSubtotal() : double
+        + getPrato() : Prato
+        + setPrato(prato: Prato)
+    }
+
+    class Prato {
+        - codigo: int
+        --
+        - nome: String
+        - descricao: String
+        - tipo: TiposPrato
+        - preco: double
+        ..
+        + getCodigo() : int
+        + setCodigo(codigo: int)
+        + getNome() : String
+        + setNome(nome: String)
+        + getDescricao() : String
+        + setDescricao(descricao: String)
+        + getTipo() : TiposPrato
+        + setTipo(tipo: TiposPrato)
+        + getPreco() : double
+        + setPreco(preco: double)
+    }
+    note right of ItemPedido
+        Necessário para manter o preço do prato no momento da compra
+        e lidar com mais de um prato do mesmo tipo por pedido
+    end note
+}
+
+fenum -[hidden]down----> fap
+fap -[hidden]down-----> fco
+fco -[hidden]down-----> fda
+fda -[hidden]down-----> fen
+
+'===============================================================
+'                        RELAÇÕES
 '===============================================================
 
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' DENTRO DA CAMADA DE APRESENTAÇÃO
+'''''''''''''''''''''''''''''''''''''''''''''''''
+ClienteForm ..|> FormularioBase
+GarcomForm  ..|> FormularioBase
+MesaForm    ..|> FormularioBase
+PratoForm   ..|> FormularioBase
+
+FramePrincipal "1" o-- "1..*" ClienteForm
+FramePrincipal "1" o-- "1..*" GarcomForm
+FramePrincipal "1" o-- "1..*" MesaForm
+FramePrincipal "1" o-- "1..*" PratoForm
+FramePrincipal "1" o-- "1..*" PedidoForm
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' DA APRESENTAÇÃO PARA O CONTROLE
+'''''''''''''''''''''''''''''''''''''''''''''''''
+ClienteForm ..> ClienteController : chama >
+GarcomForm  ..> GarcomController : chama >
+MesaForm    ..> MesaController   : chama >
+PratoForm   ..> PratoController  : chama >
+PedidoForm  ..> PedidoController : chama >
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' DO CONTROLE PARA OS DADOS
+'''''''''''''''''''''''''''''''''''''''''''''''''
+ClienteController ..> SQLController : usa
+GarcomController  ..> SQLController : usa
+MesaController    ..> SQLController : usa
+PratoController   ..> SQLController : usa
+PedidoController  ..> SQLController : usa
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' DO CONTROLE PARA AS ENTIDADES
+'''''''''''''''''''''''''''''''''''''''''''''''''
+ClienteController ..> Cliente     : opera >
+GarcomController  ..> Garcom      : opera >
+MesaController    ..> Mesa        : opera >
+PratoController   ..> Prato       : opera >
+PedidoController  ..> Pedido      : opera >
+PedidoController  ..> ItemPedido  : opera >
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' CONTROLADORA → CRIA TUDO
+'''''''''''''''''''''''''''''''''''''''''''''''''
+ControladoraInterface ..> FramePrincipal    : cria >
+ControladoraInterface ..> ClienteForm       : cria >
+ControladoraInterface ..> GarcomForm        : cria >
+ControladoraInterface ..> MesaForm          : cria >
+ControladoraInterface ..> PratoForm         : cria >
+ControladoraInterface ..> PedidoForm        : cria >
+ControladoraInterface ..> ClienteController : cria >
+ControladoraInterface ..> GarcomController  : cria >
+ControladoraInterface ..> MesaController    : cria >
+ControladoraInterface ..> PratoController   : cria >
+ControladoraInterface ..> PedidoController  : cria >
+ControladoraInterface ..> SQLController     : obtém instância
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' ASSOCIAÇÕES ENTRE ENTIDADES
+'''''''''''''''''''''''''''''''''''''''''''''''''
 Cliente "1" -- "0..*" Pedido : realiza >
-
 Garcom "1" -- "0..*" Pedido : atende >
 Mesa "1" -- "0..*" Pedido : pertence <
-
-Pedido "1" *-- "1..*" ItemPedido
-
-ItemPedido "*"-- "1" Prato: referencia >
-
-FormularioCadastroCliente <.. FormularioPrincipal
-FormularioCadastroGarcom <.. FormularioPrincipal
-FormularioCadastroMesa <.. FormularioPrincipal
-FormularioCadastroPedido <.. FormularioPrincipal
-FormularioCadastroPrato <.. FormularioPrincipal
-
-'===============================================================
-'                           ANOTAÇÕES
-'===============================================================
-
-note right of Garcom
-CPF deve ser válido
-end note
-
-note right of ItemPedido
-Necessário para manter o preço do prato no momento da compra
-e lidar com mais de um prato do mesmo tipo por pedido
-end note
+Pedido "1" *-- "1..*" ItemPedido: compõe <
+ItemPedido "*" -- "1" Prato : referencia >
 
 @enduml

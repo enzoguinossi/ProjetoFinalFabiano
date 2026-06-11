@@ -8,6 +8,17 @@ public class Garcom {
     private double salario;
     private TurnosTrabalho turno;
 
+    public Garcom() {}
+
+    public Garcom(int codigo, String nome, String telefone, String cpf, double salario, TurnosTrabalho turno) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.salario = salario;
+        this.turno = turno;
+    }
+
     public int getCodigo() { return codigo; }
     public void setCodigo(int codigo) { this.codigo = codigo; }
 
@@ -25,4 +36,16 @@ public class Garcom {
 
     public TurnosTrabalho getTurno() { return turno; }
     public void setTurno(TurnosTrabalho turno) { this.turno = turno; }
+
+    @Override
+    public String toString() {
+        return "Garcom{" +
+                "codigo=" + codigo +
+                ", nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", salario=" + salario +
+                ", turno=" + turno +
+                '}';
+    }
 }
