@@ -28,7 +28,97 @@ enum TiposPrato {
 }
 
 '===============================================================
-'                          CLASSES
+'                          CLASSES INTERFACE
+'===============================================================
+
+
+class FormularioBase {
+    - pnlConteudo: JPanel
+    - pnlBotoes: JPanel
+    - btnSalvar: JButton
+    - btnAlterar: JButton
+    - btnExcluir: JButton
+    - btnListar: JButton
+    - btnFechar: JButton
+}
+
+' TODO: ADICIONAR LISTA/TABELA
+class FormularioCadastroCliente extends FormularioBase {
+    - lblCodigo: JLabel
+    - txtCodigo: JTextField
+    - lblNome: JLabel
+    - txtNome: JTextField
+    - lblCidade: JLabel
+    - txtCidade: JTextField
+    - lblCelular: JLabel
+    - txtCelular: JTextField
+    - lblEmail: JLabel
+    - txtEmail: JTextField
+}
+
+' TODO: ADICIONAR LISTA/TABELA
+class FormularioCadastroGarcom extends FormularioBase {
+    - lblCodigo: JLabel
+    - txtCodigo: JTextField
+    - lblNome: JLabel
+    - txtNome:   JTextField
+    - lblTelefone: JLabel
+    - txtTelefone: JTextField
+    - lblCPF: JLabel
+    - txtCPF: JTextField
+    - lblSalario: JLabel
+    - txtSalario: JTextField
+    - lblTurno: JLabel
+    - cmbTurno: JComboBox
+}
+
+' TODO: ADICIONAR LISTA/TABELA
+class FormularioCadastroMesa extends FormularioBase {
+    - lblCodigo: JLabel
+    - txtCodigo: JTextField
+    - lblQuantidadeLugares: JLabel
+    - txtQuantidadeLugares: JTextField
+    - lblSituacao: JLabel
+    - cmbSituacao: JComboBox
+    - lblSetor: JLabel
+    - txtSetor: JTextField
+}
+
+' TODO: ADICIONAR LISTA/TABELA
+class FormularioCadastroPrato extends FormularioBase {
+    - lblCodigo: JLabel
+    - txtCodigo: JTextField
+    - lblNome: JLabel
+    - txtNome: JTextField
+    - lblDescricao: JLabel
+    - txtDescricao: JTextField
+    - lblTipo: JLabel
+    - cmbTipo: JComboBox
+    - lblPreco: JLabel
+    - txtPreco: JTextField
+}
+
+' TODO: ADICIONAR LISTA/TABELA
+class FormularioCadastroPedido extends FormularioBase {
+    - lblCodigo: JLabel
+    - txtCodigo: JTextField
+    - lblData: JLabel
+    - txtData: JTextField
+    - lblStatus: JLabel
+    - cmbStatus: JComboBox
+    - lblGarcom: JLabel
+    - cmbGarcom: JComboBox
+    - lblMesa: JLabel
+    - cmbMesa: JComboBox
+    - lblCliente: JLabel
+    - cmbCliente: JComboBox
+    - lblTotalPagar: JLabel
+    - txtTotalPagar: JTextField
+}
+class FormularioPrincipal {
+}
+'===============================================================
+'                          CLASSES ENTIDADES
 '===============================================================
 
 class Cliente {
@@ -89,6 +179,12 @@ Mesa "1" -- "0..*" Pedido : pertence <
 Pedido "1" *-- "1..*" ItemPedido
 
 ItemPedido "*"-- "1" Prato: referencia >
+
+FormularioCadastroCliente <.. FormularioPrincipal
+FormularioCadastroGarcom <.. FormularioPrincipal
+FormularioCadastroMesa <.. FormularioPrincipal
+FormularioCadastroPedido <.. FormularioPrincipal
+FormularioCadastroPrato <.. FormularioPrincipal
 
 '===============================================================
 '                           ANOTAÇÕES
